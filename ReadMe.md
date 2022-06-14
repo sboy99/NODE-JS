@@ -68,3 +68,46 @@
 - Create a readFile Stream using createReadStream function from fs module.
 - Sending chunked data from stream.
 - Sending chunked data from server to client using stream (http,fs modules)
+- Sending files to client using readFile(fs module) and http module.
+  - things I learned ...
+  - Open the file (you want to send to the client) and save the buffer inside a variable.
+  - Use response object to send desired data.
+  - declare writeHead -> it takes first parameter as sataus 'code' and second paramere is an object which specifies Content Type.
+  - Ultimately we end our response by invoking response.end().
+
+# Day7: Express Intro..
+
+- Definition: Epress is a minimal fexible framework of node. That helps to build web-apps in stable and easyest way.
+- Install Express: run that command
+
+  > npm i express --save
+
+  [although --save is optional from version 4.0]
+
+- Creating Server with with express..
+
+  _1->_ First invoke express using require
+
+  > const express=require('express')
+  > </br>
+  > const app= express();
+
+  _2->_ We have to call express with a URI(Uniform Resource Identifier) a HTTP module(GET,POST,PUT,DELETE,...)
+
+  > app.get('/',(req,res)=>{
+  > </br>
+  > res.send('Hello World..')  
+  > })
+
+  - Here app is an express instance which is calling a HTTP module 'get' inside the parameter first is a URI
+    and second one is action handler.
+  - Whenever User's request url mathes to a certain URI
+    respective action is performed.
+
+  _3->_ Hosting server to a Port.
+
+  > const port=process.env.PORT || 5000
+  > </br>
+  > app.listen(port,()=>console.log(\`Listen to port ${port}...`)) // use `` instead of ""
+
+# Day8:Sending HTML,CSS,JS and other assetes to client...
