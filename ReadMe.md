@@ -80,7 +80,7 @@
 - Definition: Epress is a minimal fexible framework of node. That helps to build web-apps in stable and easyest way.
 - Install Express: run that command
 
-  > npm i express --save
+       $ npm i express --save
 
   [although --save is optional from version 4.0]
 
@@ -88,16 +88,14 @@
 
   _1->_ First invoke express using require
 
-  > const express=require('express')
-  > </br>
-  > const app= express();
+       const express=require('express')
+       const app= express();
 
   _2->_ We have to call express with a URI(Uniform Resource Identifier) a HTTP module(GET,POST,PUT,DELETE,...)
 
-  > app.get('/',(req,res)=>{
-  > </br>
-  > res.send('Hello World..')  
-  > })
+       app.get('/',(req,res)=>{
+       res.send('Hello World..')
+       })
 
   - Here app is an express instance which is calling a HTTP module 'get' inside the parameter first is a URI
     and second one is action handler.
@@ -106,8 +104,121 @@
 
   _3->_ Hosting server to a Port.
 
-  > const port=process.env.PORT || 5000
-  > </br>
-  > app.listen(port,()=>console.log(\`Listen to port ${port}...`)) // use `` instead of ""
+         const port=process.env.PORT || 5000
+         app.listen(port,()=>console.log(`Listen to port ${port}...`)) // use `` instead of ""
 
 # Day8:Sending HTML,CSS,JS and other assetes to client...
+
+# Day9:Middleware..
+
+- What is middleware?
+
+  -
+
+  * Middleware is something or some actions that happens in the middle from user request something on server and server sends some output to user.
+
+        ...
+         app.get('/',`middleware`,(req,res)=>{
+          console.log('Home Page')
+        })
+
+- ## What we can do with middleware?
+  - We can perform multiple side checking or side operation with a middleware.
+    - Example:
+      - We can run logger fuction that logs every single avtivity of a user
+      - We can run authorize function which decide a user can access certain item or not..
+- ## How to define a middleware?
+
+  - There are multiple ways we can use middlewares.Some instances are follwing..
+
+    - we can use it inline..
+
+          ...
+          app.get('/path',
+          (req,res,next)=>{
+            //middleware...
+          },
+          (req,res)=>{
+            //server response ...
+          })
+
+      - But problem here is that we can use it only inside this GET method.Theres' no reusability
+
+    - we can declare it in a outside function.This will increase reuseability.
+
+           ...
+           const logger=(req,res,next)=>{
+            //middleware...
+           }
+           app.get('/path',logger,(req,res)=>{
+            res.send('Alright!..');
+           })
+
+      - Here also we can face some issuses although theres; no internal issues but if our project gets bigger n bigger then it will make our code messy.So its always better do create a folder for middleware and export middleware.
+
+             ./middleware/logger.js
+              > const logger=(req,res,next)=>{
+                  //middleware...
+                }
+                module.exports={logger}
+            ./app.js
+              > ...
+                const {logger}=require('./middleware/logger);
+                 ...
+                   app.get('/path',logger,(req,res)=>{
+                    res.send('Alright!..')
+                   })
+
+- ## Parameters of Middleware..
+
+  - (req,res,next)
+
+    - req: same user request object.Middleware can retrive user requests.
+    - res: same server response object.Middleware can send response to cliend if required..
+    - next: next is a function instance.That runs next function of the method.
+
+            ...
+            app.get('/path',logger,(req,res)=>{
+              //server response..
+            })
+
+      if we call 'next()' function then only server response will run otherwise if middleware doesn't send any response applicaton wil stuck there..
+      So next() call is important.
+
+- ## Using middlewares in a method..
+
+  - Method 1:
+
+          ...
+          app.get('/path',middleware,(req,res)=>{
+            //server response
+          })
+
+    this middleware only run for this '/path' only.
+
+  - Method 2:
+
+          ...
+          app.use(middleware)
+          app.get('/path',(req,res)=>{
+            //server response
+          })
+
+    this will run for every url of the server.
+
+  - Method 3:
+
+          ...
+          app.use('/specificPath',middleware)
+          app.get('/path',(req,res)=>{
+            //server response
+          })
+
+    this middleware will run for every url of the server after this '/specificPath'.
+
+    - For example: If we wish to run a middleware after an api then we can use..
+
+      ...
+      app.use('/api',middleware)
+      this middleware will run for every url after '/api' like
+      '/api/products','/api/items' but will not run for '/home'
