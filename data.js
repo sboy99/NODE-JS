@@ -115,4 +115,22 @@ const products = [
     shipping: true,
   },
 ];
-module.exports = { products, jobs };
+const people = [
+  {
+    id: 1,
+    name: "Sagar",
+  },
+  {
+    id: 2,
+    name: "Moni",
+  },
+  {
+    id: 3,
+    name: "Tim",
+  },
+  {
+    id: 4,
+    name: "Tum",
+  },
+];
+module.exports = { products, jobs, people };

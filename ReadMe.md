@@ -111,23 +111,21 @@
 
 # Day9:Middleware..
 
-- What is middleware?
+- ### What is middleware?
 
-  -
-
-  * Middleware is something or some actions that happens in the middle from user request something on server and server sends some output to user.
+  - Middleware is something or some actions that happens in the middle from user request something on server and server sends some output to user.
 
         ...
          app.get('/',`middleware`,(req,res)=>{
           console.log('Home Page')
         })
 
-- ## What we can do with middleware?
+- ### What we can do with middleware?
   - We can perform multiple side checking or side operation with a middleware.
     - Example:
       - We can run logger fuction that logs every single avtivity of a user
       - We can run authorize function which decide a user can access certain item or not..
-- ## How to define a middleware?
+- ### How to define a middleware?
 
   - There are multiple ways we can use middlewares.Some instances are follwing..
 
@@ -169,9 +167,9 @@
                     res.send('Alright!..')
                    })
 
-- ## Parameters of Middleware..
+- ### Parameters of Middleware..
 
-  - (req,res,next)
+  - ##### (req,res,next)
 
     - req: same user request object.Middleware can retrive user requests.
     - res: same server response object.Middleware can send response to cliend if required..
@@ -185,9 +183,9 @@
       if we call 'next()' function then only server response will run otherwise if middleware doesn't send any response applicaton wil stuck there..
       So next() call is important.
 
-- ## Using middlewares in a method..
+- ### Using middlewares in a method..
 
-  - Method 1:
+  - ##### Method 1:
 
           ...
           app.get('/path',middleware,(req,res)=>{
@@ -196,7 +194,7 @@
 
     this middleware only run for this '/path' only.
 
-  - Method 2:
+  - ##### Method 2:
 
           ...
           app.use(middleware)
@@ -206,7 +204,7 @@
 
     this will run for every url of the server.
 
-  - Method 3:
+  - ##### Method 3:
 
           ...
           app.use('/specificPath',middleware)
@@ -220,5 +218,22 @@
 
       ...
       app.use('/api',middleware)
-      this middleware will run for every url after '/api' like
-      '/api/products','/api/items' but will not run for '/home'
+
+      this middleware will run for every url after '/api' like '/api/products','/api/items' but will not run for '/home'
+
+- ## Using multiple middleware
+
+  - We can use multiple middleware together by defining them inside an array
+
+        ...
+        app.use([middleware1,middleware2]);
+
+- ## Types of middleware;
+
+  - #### Custom Middlewares:
+    - Those middlewares, created by developer such as `logger` in our case.
+  - #### Express Middlewares:
+    - Express has some in-built middlewares.We can use them, one of the famous middle ware is `express.static()`. Here using static we can send assets without sending them individually.
+  - #### Third-Party Middleware:
+    - Those middle middleware comes from external source.
+      We can install third party middleware using npm.One of the most used third party middleware is `morgan`. It is used to track every activity of a user on the server.
